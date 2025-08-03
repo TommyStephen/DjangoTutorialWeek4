@@ -62,22 +62,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'week4.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+DATABASE_URL = os.getenv('DATABASE_URL')
 
-if os.getenv('RENDER'):
+if DATABASE_URL:
+    # Production (Render / Heroku)
     DATABASES = {
-        'default': dj_database_url.config(default='sqlite:///db.sqlite3')
+        'default': dj_database_url.config(conn_max_age=600)
     }
 else:
+    # Local Development (PostgreSQL or SQLite)
     DATABASES = {
         'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'week4db',  # Create this DB in PostgreSQL
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        'PORT': '5432',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'week2db',
+            'USER': 'postgres',
+            'PASSWORD': 'root',
+            'HOST': 'localhost',
+            'PORT': '5432',
         }
     }
 
